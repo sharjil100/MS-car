@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Car details | MS-CAR</title>
+  <meta name="description" content="Car details at MS-CAR, Banani, Dhaka.">
+  <meta name="theme-color" content="#0a0a0b">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..600&family=Manrope:wght@300;400;500;600;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-solid">
+
+<header class="nav" id="nav">
+  <a class="nav__wa" data-wa href="#" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35M12.05 21.8a9.87 9.87 0 0 1-5.03-1.38l-.36-.22-3.74.99 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88a9.88 9.88 0 0 1 9.88 9.9c0 5.44-4.44 9.88-9.89 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.9c0 2.09.55 4.14 1.59 5.94L.06 24l6.3-1.65a11.9 11.9 0 0 0 5.69 1.45h.01c6.55 0 11.89-5.34 11.89-11.9 0-3.17-1.24-6.16-3.48-8.4Z"/></svg></a>
+  <a class="brand" href="./" aria-label="MS-CAR home">
+    <img src="assets/img/logo-white-sm.png" alt="MS-CAR" class="brand__logo" width="527" height="187">
+  </a>
+  <button class="nav__burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+</header>
+
+<div class="drawer" id="drawer" hidden>
+  <a href="./">Home</a>
+  <a href="./#inventory">Inventory</a>
+  <a href="./#categories">Collections</a>
+  <a href="sell.html">Sell your car</a>
+  <a href="./#contact">Contact</a>
+  <a class="btn btn--gold" data-wa href="#">Chat on WhatsApp</a>
+</div>
+
+<main class="pd" id="top">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="./">Home</a><span aria-hidden="true">/</span><a href="./#inventory">Inventory</a><span aria-hidden="true">/</span><span id="crumbName" aria-current="page">Car</span>
+  </nav>
+  <div id="car"></div>
+</main>
+
+<section class="band">
+  <div class="band__inner reveal">
+    <div>
+      <p class="eyebrow">Visit · Call · Chat</p>
+      <h2>Your next car is one message away.</h2>
+      <p class="band__addr"><span data-address></span> · <span data-address-note></span></p>
+    </div>
+    <div class="band__ctas">
+      <a class="btn btn--gold" data-wa href="#">Chat on WhatsApp</a>
+      <a class="btn btn--ghost" data-tel href="#"></a>
+      <a class="link" data-map href="#" target="_blank" rel="noopener">Get directions →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__brand">
+    <img src="assets/img/logo-white-sm.png" alt="MS-CAR" width="527" height="187">
+    <p data-address></p>
+  </div>
+  <nav class="footer__col" aria-label="Explore">
+    <h4>Explore</h4>
+    <a href="./#inventory">Inventory</a><a href="./#categories">Collections</a><a href="./#services">Services</a><a href="sell.html">Sell your car</a>
+  </nav>
+  <div class="footer__col">
+    <h4>Contact</h4>
+    <a data-tel href="#"></a><a data-email href="#"></a><a data-wa href="#">WhatsApp</a><a data-fb href="#" target="_blank" rel="noopener">Facebook</a>
+  </div>
+  <div class="footer__col">
+    <h4>Opening hours</h4>
+    <p data-hours></p>
+  </div>
+  <p class="footer__copy">© <span data-year></span> MS-CAR. All rights reserved.</p>
+</footer>
+
+<a class="wa-float" data-wa href="#" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3Zm0 23.7c-2 0-4-.5-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.7 10.7 0 1 1 16 26.7Zm5.9-8c-.3-.2-1.9-1-2.2-1-.3-.2-.5-.2-.7.1l-1 1.3c-.2.2-.4.2-.7 0a8.8 8.8 0 0 1-4.4-3.8c-.3-.6.3-.5 1-1.7.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6 0-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.2.2 2.3 3.5 5.5 4.9 2 .9 2.8 1 3.8.8.6-.1 1.9-.8 2.2-1.5.2-.7.2-1.4.2-1.5-.1-.2-.3-.3-.7-.4Z"/></svg>
+</a>
+
+<dialog class="lightbox" id="lightbox" aria-label="Photo viewer">
+  <button class="lightbox__close" type="button" aria-label="Close">×</button>
+  <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="Previous photo">‹</button>
+  <div class="lightbox__img"></div>
+  <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="Next photo">›</button>
+  <p class="lightbox__count"></p>
+</dialog>
+
+<script src="js/data.js"></script>
+<script src="js/common.js"></script>
+<script src="js/car.js"></script>
+</body>
+</html>

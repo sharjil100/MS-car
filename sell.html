@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sell your car | MS-CAR</title>
+  <meta name="description" content="Sell your car to MS-CAR in Banani, Dhaka. Fair valuation, paperwork handled, same-day payment.">
+  <meta name="theme-color" content="#0a0a0b">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..600&family=Manrope:wght@300;400;500;600;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <a class="nav__wa" data-wa href="#" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35M12.05 21.8a9.87 9.87 0 0 1-5.03-1.38l-.36-.22-3.74.99 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88a9.88 9.88 0 0 1 9.88 9.9c0 5.44-4.44 9.88-9.89 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.9c0 2.09.55 4.14 1.59 5.94L.06 24l6.3-1.65a11.9 11.9 0 0 0 5.69 1.45h.01c6.55 0 11.89-5.34 11.89-11.9 0-3.17-1.24-6.16-3.48-8.4Z"/></svg></a>
+  <a class="brand" href="./" aria-label="MS-CAR home">
+    <img src="assets/img/logo-white-sm.png" alt="MS-CAR" class="brand__logo" width="527" height="187">
+  </a>
+  <button class="nav__burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+</header>
+
+<div class="drawer" id="drawer" hidden>
+  <a href="./">Home</a>
+  <a href="./#inventory">Inventory</a>
+  <a href="./#categories">Collections</a>
+  <a href="sell.html">Sell your car</a>
+  <a href="./#contact">Contact</a>
+  <a class="btn btn--gold" data-wa href="#">Chat on WhatsApp</a>
+</div>
+
+<main id="top">
+  <section class="sell-hero">
+    <div class="sell-hero__bg" aria-hidden="true"></div>
+    <div class="sell-hero__inner">
+      <p class="eyebrow reveal">Sell your car</p>
+      <h1 class="reveal">Ready for something new? We'll buy your car.</h1>
+      <p class="reveal">Selling your car has never been this effortless. Every step is handled with care: no stress, no pressure, just honest guidance. We take care of the paperwork and offer a fair value, so you can hand your car on with confidence and peace of mind.</p>
+      <a class="btn btn--gold reveal" href="#sellForm">Get a valuation</a>
+    </div>
+  </section>
+
+  <section class="section steps" aria-label="How it works">
+    <div class="steps__grid">
+      <div class="reveal"><span>01</span><h3>Share the details</h3><p>Tell us about your car and add a few photos. It takes two minutes.</p></div>
+      <div class="reveal"><span>02</span><h3>Get a fair offer</h3><p>Our team reviews your car against current market prices and calls you back.</p></div>
+      <div class="reveal"><span>03</span><h3>Quick inspection</h3><p>Bring the car to our Banani showroom for a short, no-obligation inspection.</p></div>
+      <div class="reveal"><span>04</span><h3>Get paid</h3><p>We handle the transfer paperwork and pay you, often on the same day.</p></div>
+    </div>
+  </section>
+
+  <section class="section sell" id="sellForm">
+    <div class="sell__wrap">
+      <div class="sell__intro">
+        <p class="eyebrow reveal">Valuation request</p>
+        <h2 class="reveal">Ready to sell your car?</h2>
+        <p class="reveal">Fill in what you know; fields marked * are required. We usually reply within a few hours during opening hours.</p>
+        <div class="sell__side reveal">
+          <p>Prefer to talk?</p>
+          <a class="btn btn--ghost" data-wa href="#">WhatsApp us</a>
+          <a class="link" data-tel href="#"></a>
+        </div>
+      </div>
+
+      <form class="form reveal" id="sellFormEl" novalidate>
+        <div class="form__grid">
+          <label class="field"><span>Full name *</span><input name="name" type="text" autocomplete="name" required></label>
+          <label class="field"><span>Phone number *</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="01XXXXXXXXX" required pattern="^(\+?88)?0?1[3-9]\d{8}$"></label>
+          <label class="field"><span>Brand *</span><input name="brand" type="text" list="brandList" placeholder="e.g. Toyota" required></label>
+          <label class="field"><span>Model *</span><input name="model" type="text" placeholder="e.g. Premio F EX" required></label>
+          <label class="field"><span>Manufacturing year *</span><input name="year" type="number" inputmode="numeric" min="1990" max="2027" placeholder="e.g. 2019" required></label>
+          <label class="field"><span>Registration year</span><input name="reg" type="number" inputmode="numeric" min="1990" max="2027" placeholder="e.g. 2021"></label>
+          <label class="field"><span>Mileage (km) *</span><input name="mileage" type="number" inputmode="numeric" min="0" placeholder="e.g. 45000" required></label>
+          <label class="field"><span>Expected price (BDT)</span><input name="price" type="number" inputmode="numeric" min="0" placeholder="e.g. 3500000"></label>
+          <label class="field field--wide"><span>Condition &amp; notes</span><textarea name="notes" rows="4" placeholder="Service history, accidents, modifications, colour…"></textarea></label>
+          <div class="field field--wide">
+            <span>Car photos</span>
+            <label class="drop" for="photos">
+              <input id="photos" name="photos" type="file" accept="image/*" multiple>
+              <strong>Upload car images</strong>
+              <small>Front, back, sides, interior and odometer: up to 10 photos</small>
+            </label>
+            <div class="drop__previews" id="previews"></div>
+          </div>
+        </div>
+        <label class="check"><input name="terms" type="checkbox" required> <span>I agree to be contacted by MS-CAR about this car and accept the terms of use.</span></label>
+        <p class="form__error" id="formError" role="alert" hidden></p>
+        <button class="btn btn--gold form__submit" type="submit">Submit for valuation</button>
+      </form>
+
+      <div class="form-done" id="formDone" hidden tabindex="-1">
+        <h3>Thanks, we've got your details.</h3>
+        <p>WhatsApp has opened with your car's details. Send the message and <b>attach your photos in the chat</b>, and our team will get back to you with an offer.</p>
+        <p>If WhatsApp didn't open, <a class="link" id="waRetry" href="#" target="_blank" rel="noopener">tap here to send it</a> or call <a class="link" data-tel href="#"></a>.</p>
+      </div>
+    </div>
+    <datalist id="brandList"></datalist>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer__brand">
+    <img src="assets/img/logo-white-sm.png" alt="MS-CAR" width="527" height="187">
+    <p data-address></p>
+  </div>
+  <nav class="footer__col" aria-label="Explore">
+    <h4>Explore</h4>
+    <a href="./#inventory">Inventory</a><a href="./#categories">Collections</a><a href="./#services">Services</a><a href="sell.html">Sell your car</a>
+  </nav>
+  <div class="footer__col">
+    <h4>Contact</h4>
+    <a data-tel href="#"></a><a data-email href="#"></a><a data-wa href="#">WhatsApp</a><a data-fb href="#" target="_blank" rel="noopener">Facebook</a>
+  </div>
+  <div class="footer__col">
+    <h4>Opening hours</h4>
+    <p data-hours></p>
+  </div>
+  <p class="footer__copy">© <span data-year></span> MS-CAR. All rights reserved.</p>
+</footer>
+
+<a class="wa-float" data-wa href="#" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3Zm0 23.7c-2 0-4-.5-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.7 10.7 0 1 1 16 26.7Zm5.9-8c-.3-.2-1.9-1-2.2-1-.3-.2-.5-.2-.7.1l-1 1.3c-.2.2-.4.2-.7 0a8.8 8.8 0 0 1-4.4-3.8c-.3-.6.3-.5 1-1.7.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6 0-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.2.2 2.3 3.5 5.5 4.9 2 .9 2.8 1 3.8.8.6-.1 1.9-.8 2.2-1.5.2-.7.2-1.4.2-1.5-.1-.2-.3-.3-.7-.4Z"/></svg>
+</a>
+
+<script src="js/data.js"></script>
+<script src="js/common.js"></script>
+<script src="js/sell.js"></script>
+</body>
+</html>

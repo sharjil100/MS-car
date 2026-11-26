@@ -1,0 +1,12 @@
+# Raw video masters and editing sources (large; the site uses the encoded files in assets/video)
+source/
+
+# Client proposal (contains pricing): kept local, not part of the website
+proposal/
+
+# OS / editor
+Thumbs.db
+desktop.ini
+.DS_Store
+.claude/settings.local.json
+*.log

@@ -21,8 +21,9 @@ Open http://localhost:8080. Use a local server, not a double-click on the file, 
 `tools/encode-hero.ps1` turns a source clip into the adaptive, seamless-loop hero set in `assets/video/`.
 ```
 .\tools\encode-hero.ps1 -Source source\clip.mp4 -Duration 12 -Renditions 720,480
-.\tools\encode-hero.ps1 -Source source\portrait.mp4 -Renditions mobile -PosterName hero-poster-mobile.jpg -PosterSize 720:1280
+.\tools\encode-hero.ps1 -Source source\clip.mp4 -Duration 12 -FocusX 0.4 -Renditions mobile -PosterName hero-poster-portrait.jpg -PosterSize 720:1280
 ```
+Phones play a portrait crop of the same video (`-FocusX` sets where the crop sits). Rename the output `hero-mobile.*` to `hero-portrait.*`.
 Options: `-Sharpen 0.8 -RateScale 1.8` for soft sources (e.g. Facebook downloads).
 After re-encoding, bump `CACHE` in `js/home.js` so browsers fetch the new files.
 

@@ -26,7 +26,7 @@
   function wanted() {
     if (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "")) return [];
     const portrait = innerHeight > innerWidth * 1.05;
-    if (portrait) return ["mobile", "480"];                  // 720x1280 portrait clip
+    if (portrait) return ["portrait", "480"];                // 720x1280 crop of the same convoy video
     const px = innerWidth * Math.min(devicePixelRatio || 1, 2);
     const slow = conn.effectiveType === "3g" || (conn.downlink && conn.downlink < 1.5);
     if (slow || px < 1100) return ["720", "480"];
@@ -35,7 +35,7 @@
 
   const ext = video.canPlayType('video/webm; codecs="vp9"') ? "webm" : "mp4";
   // Bump this whenever the video files are re-encoded
-  const CACHE = "ms-hero-v2";
+  const CACHE = "ms-hero-v3";
   try {
     caches.keys().then((keys) => keys
       .filter((k) => k.startsWith("ms-hero-") && k !== CACHE)
@@ -64,7 +64,18 @@
     return blob;
   }
 
-  function playFrom(src) {
+  // If a device claims WebM support but can't actually decode the file,
+  // switch once to the MP4 (H.264) version, which every phone can play.
+  function onFailSwitchToMp4(v, mp4Url, play) {
+    let switched = false;
+    v.addEventListener("error", () => {
+      if (switched) return; switched = true;
+      v.src = mp4Url; play();
+    });
+  }
+
+  function playFrom(src, mp4Url) {
+    if (mp4Url) onFailSwitchToMp4(video, mp4Url, () => video.play().catch(() => {}));
     video.src = src;
     video.addEventListener("playing", () => hero.classList.add("has-video"), { once: true });
     const p = video.play();
@@ -79,7 +90,7 @@
     for (const tier of list) {
       const url = `${base}-${tier}.${ext}`;
       const budget = tier === list[0] ? 9000 : 12000; // generous for the best tier
-      try { return playFrom(URL.createObjectURL(await loadBlob(url, budget))); }
+      try { return playFrom(URL.createObjectURL(await loadBlob(url, budget)), `${base}-${tier}.mp4`); }
       catch (_) { /* too slow or missing: try the next tier */ }
     }
   }
@@ -102,11 +113,18 @@
 
   /* ================= Inventory rail ================= */
   const track = $("#cars");
+  // quick-search state (set from the hero search bar)
+  const search = { make: "", budget: "" };
+  const BUDGETS = { "u1": [0, 1e7], "1-2.5": [1e7, 2.5e7], "o2.5": [2.5e7, Infinity] };
+  const budgetOk = (c, b) => !b || (c.price > 0 && c.price >= BUDGETS[b][0] && c.price < BUDGETS[b][1]);
+  const matches = (c, status, make, budget) =>
+    (!status || status === "all" || c.status === status) && (!make || c.make === make) && budgetOk(c, budget);
   function renderCars(filter = "all") {
-    const list = window.CARS.filter((c) => filter === "all" || c.status === filter);
+    const list = window.CARS.filter((c) => matches(c, filter, search.make, search.budget));
+    const searching = search.make || search.budget;
     track.innerHTML = list.length ? list.map(carCard).join("")
-      : `<p class="rail__empty">No ${filter.toLowerCase()} cars listed right now. <a data-wa href="#">Ask us on WhatsApp</a>: we can source one for you.</p>`;
-    $$("[data-wa]", track).forEach((a) => { a.href = window.MS.waMsg(`Hello ${S.name}, I'm looking for a ${filter.toLowerCase()} car.`); a.target = "_blank"; });
+      : `<p class="rail__empty">${searching ? "Nothing in the showroom matches that right now." : `No ${filter.toLowerCase()} cars listed right now.`} <a data-wa href="#">Ask us on WhatsApp</a>: we can source one for you.</p>`;
+    $$("[data-wa]", track).forEach((a) => { a.href = window.MS.waMsg(`Hello ${S.name}, I'm looking for a ${[filter === "all" ? "" : filter.toLowerCase(), search.make].filter(Boolean).join(" ") || "luxury"} car.`); a.target = "_blank"; });
     track.scrollTo({ left: 0 });
     updateRailBtns();
   }
@@ -118,6 +136,47 @@
     const chip = $(`.chip[data-filter="${a.dataset.jump}"]`);
     if (chip) chip.click();
   }));
+
+  /* ================= Hero quick search + info strip ================= */
+  const hs = $("#heroSearch"), note = $("#searchNote");
+  const activeChip = () => $(".chip.is-active")?.dataset.filter || "all";
+  function showNote() {
+    const bits = [search.make, search.budget && $(`option[value="${search.budget}"]`, hs).textContent];
+    note.hidden = !bits.some(Boolean);
+    note.innerHTML = note.hidden ? "" : `Showing <b>${bits.filter(Boolean).map(window.MS.esc).join(" &middot; ")}</b> <button type="button">Clear &times;</button>`;
+    $("button", note)?.addEventListener("click", () => {
+      search.make = search.budget = ""; hs.reset(); updateCount(); showNote(); renderCars(activeChip());
+    });
+  }
+  function updateCount() {
+    const f = hs.elements, n = window.CARS.filter((c) => matches(c, f.condition.value, f.make.value, f.budget.value)).length;
+    $(".hs__count", hs).textContent = n ? `Show ${n} car${n > 1 ? "s" : ""}` : "Ask us to source it";
+  }
+  if (hs) {
+    const makes = [...new Set(window.CARS.map((c) => c.make))].sort();
+    makes.forEach((m) => hs.elements.make.add(new Option(m, m)));
+    hs.addEventListener("change", updateCount);
+    updateCount();
+    hs.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const f = hs.elements;
+      search.make = f.make.value; search.budget = f.budget.value;
+      const chip = $(`.chip[data-filter="${f.condition.value || "all"}"]`);
+      chip.click();
+      showNote();
+      $("#inventory").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+    });
+  }
+  $$("[data-stock-count]").forEach((el) => { el.textContent = window.CARS.length; });
+  const feat = $("#heroFeat");
+  if (feat) { // the highest-priced car in stock
+    const c = [...window.CARS].sort((a, b) => b.price - a.price)[0];
+    const photo = (c.gallery || []).find((g) => !window.MS.isCut(g));
+    feat.href = window.MS.carUrl(c);
+    $(".hstrip__thumb", feat).innerHTML = photo ? window.MS.img(photo, { alt: "", sizes: "74px" }) : "";
+    $(".hstrip__txt", feat).innerHTML = `<small>Featured &middot; ${window.MS.priceShort(c.price)}</small><strong>${window.MS.esc(`${c.year} ${c.name}`)}</strong>`;
+    feat.setAttribute("aria-label", `Featured: ${c.year} ${c.name}`);
+  }
   const prev = $(".rail__btn--prev"), next = $(".rail__btn--next");
   const step = () => (track.firstElementChild?.offsetWidth || 300) + 20;
   prev.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
@@ -222,18 +281,27 @@
     if (!sec) return;
     const v = $(".spot__video", sec), btn = $(".spot__sound", sec), bar = $(".spot__progress span", sec);
     const small = conn.saveData || /(^|-)2g$|3g/.test(conn.effectiveType || "") || (innerWidth < 600 && (devicePixelRatio || 1) <= 2);
-    const url = `${v.dataset.base}-${small ? "480" : "720"}.${ext}`;
+    // MP4 (H.264 + AAC): this reel has sound, and WebM's Opus audio fails on some iPhones.
+    // The MP4 is also the smaller file.
+    const url = `${v.dataset.base}-${small ? "480" : "720"}.mp4`;
     let loaded = false, inView = false;
-    const sync = () => { if (!v.src) return; if (inView && !document.hidden) v.play().catch(() => {}); else v.pause(); };
+    // If the phone blocks autoplay (e.g. iPhone Low Power Mode), show a play button instead
+    const tryPlay = () => {
+      const p = v.play();
+      if (p) p.then(() => sec.classList.remove("needs-tap")).catch(() => sec.classList.add("needs-tap"));
+    };
+    const sync = () => { if (!v.src) return; if (inView && !document.hidden) tryPlay(); else v.pause(); };
+    onFailSwitchToMp4(v, url, tryPlay); // blob playback failed: stream the file directly
     async function load() {
       if (loaded) return; loaded = true;
+      v.addEventListener("playing", () => sec.classList.add("has-video"), { once: true });
       try {
         if (location.protocol === "file:") throw 0;
         v.src = URL.createObjectURL(await loadBlob(url, 25000));
-      } catch (_) { v.src = url; } // stream directly as a fallback
-      v.addEventListener("playing", () => sec.classList.add("has-video"), { once: true });
+      } catch (_) { v.src = url; } // too slow: stream directly instead
       sync();
     }
+    $(".spot__tap", sec).addEventListener("click", () => { load(); tryPlay(); });
     new IntersectionObserver(([e]) => { if (e.isIntersecting) load(); }, { rootMargin: "600px 0px" }).observe(sec);
     new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }, { threshold: 0.35 }).observe($("#spotFrame"));
     document.addEventListener("visibilitychange", sync);
@@ -242,8 +310,62 @@
       v.muted = !v.muted;
       btn.setAttribute("aria-pressed", String(!v.muted));
       btn.setAttribute("aria-label", v.muted ? "Turn sound on" : "Turn sound off");
-      if (!v.muted) { load(); v.play().catch(() => {}); }
+      if (!v.muted) { load(); tryPlay(); }
     });
+  })();
+
+  /* ================= Lights on =================
+     Looping clip (headlights come on, the car drives off, fade to black).
+     Fully buffered before it starts (no stalls), plays only while on screen,
+     the headline appears when the headlights switch on, sound is opt-in. */
+  (() => {
+    const sec = $("#lights");
+    if (!sec) return;
+    const stage = $("#lightsStage", sec), v = $(".lights__video", sec);
+    const sound = $(".lights__sound", sec), playBtn = $(".lights__play", sec);
+    const small = conn.saveData || /(^|-)2g$|3g/.test(conn.effectiveType || "") || innerWidth < 600;
+    const url = `${v.dataset.base}-${small ? "480" : "720"}.mp4`; // MP4: plays on every phone, incl. iPhone
+    const LIT_AT = 1.0; // seconds: the headlights switch on
+    let loaded = null, inView = false;
+
+    $$("[data-wa-viewing]", sec).forEach((a) => {
+      a.href = window.MS.waMsg(`Hello ${S.name}, I'd like to book a private evening viewing at your showroom.`);
+      a.target = "_blank"; a.rel = "noopener";
+    });
+
+    const load = () => loaded || (loaded = (async () => {
+      try {
+        if (location.protocol === "file:") throw 0;
+        v.src = URL.createObjectURL(await loadBlob(url, 20000));
+      } catch (_) { v.src = url; }
+    })());
+    const tryPlay = () => {
+      const p = v.play();
+      if (p) p.then(() => sec.classList.remove("needs-tap")).catch(() => sec.classList.add("needs-tap"));
+    };
+    const start = async () => { await load(); tryPlay(); };
+
+    v.addEventListener("timeupdate", () => { if (v.currentTime >= LIT_AT) sec.classList.add("is-lit"); });
+    playBtn.addEventListener("click", start);
+    sound.addEventListener("click", () => {
+      v.muted = !v.muted;
+      sound.setAttribute("aria-pressed", String(!v.muted));
+      sound.setAttribute("aria-label", v.muted ? "Turn sound on" : "Turn sound off");
+      if (!v.muted && v.paused) { v.currentTime = 0; start(); }
+    });
+
+    if (reduceMotion) { // no autoplay: show a lit still, play on request
+      v.poster = "assets/video/night-lit.jpg";
+      sec.classList.add("is-lit", "needs-tap");
+      return;
+    }
+    // start downloading as the section approaches; play only while it is in view
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) load(); }, { rootMargin: "500px 0px" }).observe(sec);
+    new IntersectionObserver(([e]) => {
+      inView = e.isIntersecting;
+      if (inView && !sec.classList.contains("needs-tap")) start();
+      else if (!inView && !v.paused) v.pause();
+    }, { threshold: 0.45 }).observe(stage);
   })();
 
   /* ================= Social grid ================= */
